@@ -177,7 +177,7 @@ favicon.ico
 Clone the repository:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/GR-Catgirl-Player.git
+git clone https://github.com/GRStudiosAI/GR-Catgirl-Player.git
 ```
 
 Install dependencies:
