@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GR Catgirl Player</title>
+<style>
+/* Reset and base styles */
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #120018; /* Neon purple dark theme */
+  color: #fff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Three-column layout */
+.app {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 80px;
+  min-width: 80px;
+  background: rgba(20, 0, 40, 0.95);
+  padding: 20px 10px;
+  overflow-y: auto;
+  border-right: 1px solid #7b2cff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logoimg {
+  width: 50px;
+  display: block;
+  margin: 0 auto 10px;
+}
+
+.logo {
+  display: none;
+}
+
+.menu {
+  width: 100%;
+}
+
+.menu button {
+  width: 44px;
+  height: 44px;
+  margin: 10px auto;
+  padding: 0;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  transition: all 0.2s;
+}
+
+.menu button:hover, .menu button.active {
+  background: #7b2cff;
+  box-shadow: 0 0 10px #7b2cff;
+}
+
+/* Character Panel */
+.character-panel {
+  width: 250px;
+  min-width: 250px;
+  height: 100vh;
+  background: #0d0015;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #7b2cff;
+}
+
+.character-panel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+
+/* Main Player */
+.main-player {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #180022;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background: rgba(20, 0, 40, 0.9);
+  border-bottom: 1px solid #7b2cff;
+  height: 80px;
+}
+
+.search {
+  flex: 1;
+  max-width: 500px;
+  padding: 12px 20px;
+  border-radius: 20px;
+  border: 1px solid #7b2cff;
+  background: rgba(123, 44, 255, 0.1);
+  color: #fff;
+  outline: none;
+  font-size: 16px;
+}
+
+.search::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #a64dff;
+  margin-left: 20px;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Banner */
+.player-banner {
+  width: 100%;
+  height: 100px;
+  background: #180022;
+  border-bottom: 1px solid #7b2cff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.player-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Viewer Container */
+.viewer-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  overflow: hidden;
+  position: relative;
+}
+
+.media-viewer {
+  flex: 1;
+  background: #000;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(123, 44, 255, 0.2);
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.media-viewer img, .media-viewer video {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* Controls Container */
+.controls-container {
+  background: rgba(24, 0, 34, 0.9);
+  padding: 15px 25px;
+  border-radius: 12px;
+  border: 1px solid #7b2cff;
+}
+
+.timeline-wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.time-display {
+  font-family: monospace;
+  font-size: 14px;
+  color: #d4a5ff;
+  width: 60px;
+  text-align: center;
+}
+
+.timeline {
+  flex: 1;
+  margin: 0 15px;
+  cursor: pointer;
+  height: 6px;
+  -webkit-appearance: none;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  outline: none;
+}
+
+.timeline::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #a64dff;
+  cursor: pointer;
+  box-shadow: 0 0 10px #7b2cff;
+}
+
+.controls-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.main-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  justify-content: center;
+}
+
+.control-btn {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.control-btn:hover {
+  background: rgba(123, 44, 255, 0.3);
+  color: #d4a5ff;
+}
+
+.control-btn.play-pause {
+  font-size: 28px;
+  width: 50px;
+  height: 50px;
+  background: #7b2cff;
+}
+
+.control-btn.play-pause:hover {
+  background: #a64dff;
+  box-shadow: 0 0 15px #7b2cff;
+  color: #fff;
+}
+
+/* Side controls (Volume, Speed, Fullscreen) */
+.side-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 250px;
+}
+
+.side-controls.left {
+  justify-content: flex-start;
+}
+
+.side-controls.right {
+  justify-content: flex-end;
+}
+
+.volume-slider {
+  width: 80px;
+  cursor: pointer;
+  height: 4px;
+  -webkit-appearance: none;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+}
+
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+}
+
+.speed-select {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 6px;
+  outline: none;
+  cursor: pointer;
+}
+
+.speed-select option {
+  background: #180022;
+  color: #fff;
+}
+
+/* File Picker hidden but label styled */
+.file-upload-label {
+  display: inline-block;
+  padding: 10px 20px;
+  background: #a64dff;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  float: right;
+  margin-top: -45px;
+  margin-right: 20px;
+  position: relative;
+  z-index: 10;
+  box-shadow: 0 0 10px rgba(123, 44, 255, 0.5);
+}
+.file-upload-label:hover {
+  background: #7b2cff;
+}
+#global-file-picker {
+  display: none;
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <img class="logoimg" src="public/logos/logo.png" alt="Logo" title="GR Catgirl Player">
+    <div class="logo">GR Catgirl Player</div>
+    
+    <label class="menu">
+      <input type="file" id="global-file-picker" accept="image/*,video/*,audio/*" multiple>
+      <button onclick="document.getElementById('global-file-picker').click()" title="Open Media File">📂</button>
+    </label>
+
+    <div class="menu" style="margin-top: 20px;">
+      <button class="active" title="Player">▶</button>
+      <button title="GIF Player">🎞</button>
+      <button title="Video Player">🎥</button>
+      <button title="Music Player">🎵</button>
+      <button title="Image Viewer">🖼</button>
+    </div>
+  </div>
+
+  <!-- Character Panel -->
+  <div class="character-panel">
+    <img src="public/backgrounds/character.png" alt="Character">
+  </div>
+
+  <!-- Main Player -->
+  <div class="main-player">
+    <div class="header">
+      <input class="search" placeholder="Search media library..." type="text">
+      <div class="avatar">
+        <img src="public/profiles/profile.png" alt="Profile">
+      </div>
+    </div>
+
+    <!-- Banner -->
+    <div class="player-banner">
+      <img src="public/backgrounds/banner.png" alt="Banner">
+    </div>
+
+    <!-- Viewer & Controls -->
+    <div class="viewer-container">
+      <div class="media-viewer" id="media-viewer-container">
+        <!-- Render surface for currently playing media -->
+        <h2 style="color: rgba(255,255,255,0.3)">Open a file to begin</h2>
+      </div>
+
+      <div class="controls-container">
+        <div class="timeline-wrapper">
+          <span class="time-display" id="current-time">0:00</span>
+          <input type="range" class="timeline" id="timeline" value="0" min="0" max="100" step="0.1">
+          <span class="time-display" id="duration">0:00</span>
+        </div>
+        
+        <div class="controls-row">
+          <div class="side-controls left">
+            <button class="control-btn" id="btn-volume-mute" title="Mute">🔊</button>
+            <input type="range" class="volume-slider" id="volume-slider" min="0" max="1" step="0.05" value="1">
+          </div>
+
+          <div class="main-controls">
+            <button class="control-btn" id="btn-prev" title="Previous">⏮</button>
+            <button class="control-btn" id="btn-rewind" title="Rewind">⏪</button>
+            <button class="control-btn" id="btn-stop" title="Stop">⏹</button>
+            <button class="control-btn play-pause" id="btn-play-pause" title="Play/Pause">▶</button>
+            <button class="control-btn" id="btn-replay" title="Replay">🔄</button>
+            <button class="control-btn" id="btn-fast-forward" title="Fast Forward">⏩</button>
+            <button class="control-btn" id="btn-next" title="Next">⏭</button>
+          </div>
+
+          <div class="side-controls right">
+            <select class="speed-select" id="speed-select" title="Playback Speed">
+              <option value="0.25">0.25x</option>
+              <option value="0.5">0.5x</option>
+              <option value="1" selected>1.0x</option>
+              <option value="1.5">1.5x</option>
+              <option value="2">2.0x</option>
+            </select>
+            <button class="control-btn" id="btn-fullscreen" title="Fullscreen">⛶</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts injected here -->
+<script src="js/controls.js"></script>
+<script src="js/imageViewer.js"></script>
+<script src="js/gifPlayer.js"></script>
+<script src="js/videoPlayer.js"></script>
+<script src="js/musicPlayer.js"></script>
+<script>
+  // Entry point for handling selected files
+  document.getElementById('global-file-picker').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    // Stop any existing media
+    window.PlayerControls.stop();
+    document.getElementById('media-viewer-container').innerHTML = '';
+
+    const ext = file.name.split('.').pop().toLowerCase();
+    
+    if (['gif'].includes(ext)) {
+      window.GIFPlayer.load(file);
+    } else if (['png', 'jpg', 'jpeg', 'webp', 'svg'].includes(ext)) {
+      window.ImageViewer.load(file);
+    } else if (['mp4', 'mkv', 'avi', 'mov', 'webm'].includes(ext)) {
+      window.VideoPlayer.load(file);
+    } else if (['mp3', 'flac', 'wav', 'ogg', 'm4a'].includes(ext)) {
+      window.MusicPlayer.load(file);
+    } else {
+      alert('Unsupported format');
+    }
+  });
+</script>
+</body>
+</html>
