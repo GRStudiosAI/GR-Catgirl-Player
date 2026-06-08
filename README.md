@@ -1,6 +1,6 @@
 # 🎵 GR Catgirl Player
 
-![GR Catgirl Player Banner](assets/backgrounds/banner.png)
+![GR Catgirl Player Banner](public/profiles/profile.png)
 
 GR Catgirl Player is a custom media player developed by GR Studios featuring a cyberpunk-inspired interface, GR Catgirl branding, and support for images, GIFs, videos, and audio.
 
