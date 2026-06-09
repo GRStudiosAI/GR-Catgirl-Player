@@ -226,7 +226,7 @@ Contributions, suggestions, bug reports, and pull requests are welcome.
 
 MIT License
 
-Copyright (c) 2026 GR Studios
+Copyright (c) 2026 GR Studios AI
 
 This project is licensed under the MIT License.
 
