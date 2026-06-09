@@ -1,6 +1,6 @@
 {
-  "name": "",
-  "description": "",
+  "name": "GR Catgirl Player",
+  "description": "A customized media player featuring an advanced playlist manager, rich controls for GIFs, videos, music, and images with full local persistence.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
